@@ -2,7 +2,7 @@ pipeline {
     agent { label 'jenkins-slave' }
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "oszkar-szeiler/train-schedule"
+        DOCKER_IMAGE_NAME = "takeda424/train-schedule"
         CANARY_REPLICAS = 0
     }
     stages {
@@ -32,7 +32,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'personal-docker-hub') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
