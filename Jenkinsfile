@@ -1,5 +1,5 @@
 pipeline {
-    node('jenkins-slave')
+    agent { label 'jenkins-slave' }
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "oszkar-szeiler/train-schedule"
