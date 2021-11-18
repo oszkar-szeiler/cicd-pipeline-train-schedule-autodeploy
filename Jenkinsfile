@@ -41,9 +41,9 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'jenkins-robot-token', serverUrl: 'https://kubernetes.default:443']) 
                 {
-                    curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
-                    chmod +x ./kubectl
-                    sudo mv ./kubectl /usr/local/bin/kubectl
+                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"'
+                    sh 'chmod +x ./kubectl'
+                    sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
                     sh 'kubectl apply -f train-schedule-kube-canary.yml'
                 }
             }
