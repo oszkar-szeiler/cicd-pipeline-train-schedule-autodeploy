@@ -4,6 +4,7 @@ pipeline {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "takeda424/train-schedule"
         CANARY_REPLICAS = 0
+        KUBECTL_VERSION = v1.21.0
     }
     stages {
         stage('Build') {
@@ -40,6 +41,9 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'jenkins-robot-token', serverUrl: 'https://kubernetes.default:443']) 
                 {
+                    curl -LO https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
+                    chmod +x ./kubectl
+                    sudo mv ./kubectl /usr/local/bin/kubectl
                     sh 'kubectl apply -f train-schedule-kube-canary.yml'
                 }
             }
