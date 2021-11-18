@@ -39,15 +39,11 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                withKubeConfig([credentialsId: 'jenkins-robot-token', serverUrl: 'https://kubernetes.default:443']) 
-                {
-                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"'
-                    sh 'chmod +x ./kubectl'
-                    sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
-                    sh 'export CANARY_REPLICAS=$CANARY_REPLICAS'
-                    sh 'export BUILD_NUMBER=$BUILD_NUMBER'
-                    sh 'envsubst < train-schedule-kube-canary.yml | kubectl apply -f -'
-                }
+                kubernetesDeploy(
+                    kubeconfigId: 'kubeconfig',
+                    configs: 'train-schedule-kube-canary.yml',
+                    enableConfigSubstitution: true
+                )
             }
         }
         stage('SmokeTest') {
