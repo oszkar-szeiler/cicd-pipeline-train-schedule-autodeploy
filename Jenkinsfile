@@ -45,7 +45,7 @@ pipeline {
                     sh 'chmod +x ./kubectl'
                     sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
                     sh 'export CANARY_REPLICAS=$CANARY_REPLICAS'
-                    sh 'export BUILD_NUMBER=${env.BUILD_NUMBER}'
+                    sh 'export BUILD_NUMBER=$BUILD_NUMBER'
                     sh 'envsubst < train-schedule-kube-canary.yml | kubectl apply -f -'
                 }
             }
