@@ -4,7 +4,7 @@ pipeline {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "takeda424/train-schedule"
         CANARY_REPLICAS = 0
-        KUBECTL_VERSION = v1.21.0
+        KUBECTL_VERSION = "v1.21.0"
     }
     stages {
         stage('Build') {
