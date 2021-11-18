@@ -44,7 +44,9 @@ pipeline {
                     sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"'
                     sh 'chmod +x ./kubectl'
                     sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
-                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                    sh 'export CANARY_REPLICAS=$CANARY_REPLICAS'
+                    sh 'export BUILD_NUMBER=${env.BUILD_NUMBER}'
+                    sh 'envsubst < train-schedule-kube-canary.yml | kubectl apply -f -'
                 }
             }
         }
@@ -53,7 +55,7 @@ pipeline {
                 script {
                     sleep (time: 5)
                     def response = httpRequest (
-                        url: "http://$KUBE_MASTER_IP:8081/",
+                        url: "http://localhost:30081/",
                         timeout: 30
                     )
                     if (response.status != 200) {
